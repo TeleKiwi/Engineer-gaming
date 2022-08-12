@@ -22,6 +22,7 @@ Utils.Log("------------------------------------------------");
 
 const prefix : string = "engie!";
 const presences = require("./presences.json");
+let cbug: string[] = [];
 
 // ------------ Functions ------------ \\
 
@@ -96,9 +97,8 @@ client.on("ready",async (message) => {
         client.user.setPresence({
             "status": "idle",
             "activities": [{
-                "name": chosen[0] + ` | ${prefix}help`,
-                "type": (type == "music") ? ActivityType.Listening : ActivityType.Playing,
-                "url": chosen[1]
+                "name": chosen + ` | ${prefix}help`,
+                "type": (type == "music") ? ActivityType.Listening : ActivityType.Playing
             }]
         });
     },1000 * (60 * 2.5));
@@ -185,6 +185,13 @@ client.on("messageCreate",async (message) => {
         Commands.forEach((cmd: any) => {
             if (typeof cmd.messageEvent == "function") cmd.messageEvent(message, language);
         });
+
+        if (message.guild && message.guild.id == "866250603508662313") { // The CelLua Machine Server
+            if (message.content.includes("main.lua:5031: attempt to index global 'c' (a nil value)") && cbug.indexOf(message.author.id) == -1) { // Reported over 22 times.
+                message.reply("The Time Generator cell bug has been fixed on the next version\n<@549099433707569163>");
+                cbug.push(message.author.id);
+            }
+        }
     }
 });
 
