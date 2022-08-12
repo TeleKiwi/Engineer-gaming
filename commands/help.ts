@@ -1,4 +1,4 @@
-import { CommandInteraction, Message, PermissionsBitField } from "discord.js";
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, CommandInteraction, Message, PermissionsBitField } from "discord.js";
 import { Command } from "../classes/command";
 import { Lang } from "../lang/lang";
 
@@ -15,6 +15,13 @@ class HelpCommand extends Command {
 
         if (Args[0] == undefined) {
             let description = language.get("useHelp",this.prefix);
+            let row = new ActionRowBuilder<ButtonBuilder>()
+                .addComponents(
+                    new ButtonBuilder()
+                        .setURL("https://github.com/Hd28br/Engineer-gaming")
+                        .setLabel("GitHub")
+                        .setStyle(ButtonStyle.Link),
+                );
 
             this.commands.forEach((element: Command) => {
                 let canRun = true;
@@ -30,7 +37,7 @@ class HelpCommand extends Command {
                 description += `${canRun ? "" : "~~"}\`${element.name}\`${canRun ? "" : "~~"} ${description.split("\n").at(-1).length >= 24 ? "\n" : ""}`;
             });
         
-            message.channel.send({ embeds: [Utils.embedGen.Normal("All commands", description)] });
+            message.channel.send({ embeds: [Utils.embedGen.Normal("All commands", description)], components: [row] });
         } else {
             let command = Args[0].toLowerCase();
             let foundCommand: any = this.commands.get(command);
@@ -51,6 +58,13 @@ class HelpCommand extends Command {
         let Utils = this.utils;
 
         let description = language.get("useHelp",this.prefix);
+        let row = new ActionRowBuilder<ButtonBuilder>()
+                .addComponents(
+                    new ButtonBuilder()
+                        .setURL("https://github.com/Hd28br/Engineer-gaming")
+                        .setLabel("GitHub")
+                        .setStyle(ButtonStyle.Link),
+                );
 
         this.commands.forEach((element: Command) => {
             let canRun = true;
@@ -66,7 +80,7 @@ class HelpCommand extends Command {
             description += `${canRun ? "" : "~~"}\`${element.name}\`${canRun ? "" : "~~"} ${description.split("\n").at(-1).length >= 24 ? "\n" : ""}`;
         });
     
-        interaction.reply({ embeds: [Utils.embedGen.Normal("All commands", description)] });
+        interaction.reply({ embeds: [Utils.embedGen.Normal("All commands", description)], components: [row] });
     }
 }
 
