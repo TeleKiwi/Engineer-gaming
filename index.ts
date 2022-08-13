@@ -8,6 +8,7 @@ import process from "process";
 
 import { Utils } from "./utils/utils";
 import { Lang } from "./lang/lang";
+import { Command } from "./classes/command";
 
 dotenv.config();
 
@@ -61,6 +62,7 @@ fs.readdirSync("./commands/").filter(f => f.endsWith(".ts")).forEach(element => 
     let sc = command.getSlash();
     JSONCommands.push(sc.toJSON());
 });
+const shutdown = false;
 
 // ------------ Bot events ------------ \\
 
@@ -88,6 +90,20 @@ client.on("ready",async (message) => {
         });
     }
 
+    if (shutdown) {
+        let CanShutdown = true;
+        Commands.forEach((element: any) => {
+            CanShutdown = CanShutdown && element.shutdownState();
+        });
+
+        if (CanShutdown) { // Bye bye
+            Utils.Log("Shutting down, bye bye!");
+            Utils.currency.save();
+            client.destroy();
+            process.exit(0);
+        }
+    }
+
     setInterval(async () => {
         if (!client.user) return;
         
@@ -101,6 +117,20 @@ client.on("ready",async (message) => {
                 "type": (type == "music") ? ActivityType.Listening : ActivityType.Playing
             }]
         });
+
+        if (shutdown) {
+            let CanShutdown = true;
+            Commands.forEach((element: any) => {
+                CanShutdown = CanShutdown && element.shutdownState();
+            });
+
+            if (CanShutdown) { // Bye bye
+                Utils.Log("Shutting down, bye bye!");
+                Utils.currency.save();
+                client.destroy();
+                process.exit(0);
+            }
+        }
     },1000 * (60 * 2.5));
 });
 
@@ -169,6 +199,8 @@ client.on("messageCreate",async (message) => {
             });
 
             if (canRun) {
+                if (shutdown) await message.channel.send(language.get("botShutdown"));
+
                 Promise.resolve().then(async () => {
                     foundCommand.run(message, language).catch(async (t: Error) => {
                         ShowError(t);
@@ -187,8 +219,9 @@ client.on("messageCreate",async (message) => {
         });
 
         if (message.guild && message.guild.id == "866250603508662313") { // The CelLua Machine Server
-            if (message.content.includes("main.lua:5031: attempt to index global 'c' (a nil value)") && cbug.indexOf(message.author.id) == -1) { // Reported over 22 times.
-                message.reply("The Time Generator cell bug has been fixed on the next version\n<@549099433707569163>");
+            if (message.content.includes("attempt to index global 'c' (a nil value)") && cbug.indexOf(message.author.id) == -1) { // Reported over 22 times.
+                message.reply(`The Time Generator cell bug has been fixed on the next version
+<@549099433707569163> (Reported by ${message.author.tag})`);
                 cbug.push(message.author.id);
             }
         }

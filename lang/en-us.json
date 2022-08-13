@@ -1,6 +1,7 @@
 {
     "blockedname1984": "That name ain't allowed.",
     "botStart": "Don't worry boys! The Engineer, is Engi-here!",
+    "botShutdown": ":warning: The bot is going to restart soon!",
     "commandCooldown": ":fire: Calm down.",
     "commandNoPerms": ":red_square: You don't have enough permissions!",
     "commandNotFound": ":red_square: Command not found",

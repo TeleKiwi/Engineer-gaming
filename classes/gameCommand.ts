@@ -10,6 +10,7 @@ class GameCommand extends Command {
     type: string = "game";
     events: EventsInterface = {};
     keysList: string[] = [];
+    gShutdown: any = false;
 
     async getRandomKey() {
         let key = "k";
@@ -71,6 +72,11 @@ class GameCommand extends Command {
                 });
             }
         });
+    }
+
+    shutdownState(): boolean {
+        this.gShutdown = true;
+        return this.keysList.length == 0;
     }
 }
 

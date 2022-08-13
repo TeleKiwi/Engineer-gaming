@@ -11,7 +11,7 @@ export class Command {
     aliases: string[] = [];
     permissions: any[] = [];
     credits: any[] = ["hd28br"]; // The people that made the command
-    
+
     client: Client;
     utils: UtilsInterface;
     prefix: string = "";
@@ -53,5 +53,9 @@ export class Command {
 
     async messageEvent(message: Message, language: Lang): Promise<any> {
         ////////////////////////////////////////////////////////////
+    }
+
+    shutdownState() {
+        return true;
     }
 }

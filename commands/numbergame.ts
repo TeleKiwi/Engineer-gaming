@@ -28,6 +28,8 @@ class NumbergameCommand extends GameCommand {
     // --------------------------------------------------------------------- \\
     
     async run(message: Message, language: Lang) {
+        if (this.gShutdown) return;
+        
         if (!message.deletable) {
             await message.channel.send(language.get("deletePerms"));
             return false;
