@@ -227,8 +227,7 @@ client.on("messageCreate",async (message) => {
             }
         }
 
-        // soulware asked for 50% chance
-        if (((message.author.id == "979995718351720458" || message.author.id == "534806202698432514") ? Utils.RNG.Chance(1/32) : Utils.RNG.Chance(message.content.length/4000)) && message.member && message.content != "") { // We do a little trolling
+        if (Utils.RNG.Chance(message.content.length/8000) && message.member && message.content != "") { // We do a little trolling
             Utils.Log("UwU message!!!");
             message.guild?.fetchWebhooks().then((col: Collection<any, any>) => {
                 if (!message.member) return; // Oh my god typescript
