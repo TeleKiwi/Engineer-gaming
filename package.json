@@ -1,21 +1,20 @@
 {
   "name": "engineer-gaming",
   "version": "1.0.0",
-  "description": "",
+  "description": "[Add engineer to your discord server (NOT ONLINE 24/7, SORRY)](https://discord.com/api/oauth2/authorize?client_id=943698437281562665&permissions=2147493952&scope=bot%20applications.commands \"Add engineer to your discord server\")",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [
-    "discord",
-    ""
-  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Hd28br/Engineer-gaming.git"
+  },
+  "keywords": [],
   "author": "",
   "license": "ISC",
-  "dependencies": {
-    "canvas": "^2.9.3",
-    "discord.js": "^14.1.2",
-    "dotenv": "^16.0.1",
-    "node-fetch": "^3.2.10",
-    "uwuify": "^1.0.1"
-  }
+  "bugs": {
+    "url": "https://github.com/Hd28br/Engineer-gaming/issues"
+  },
+  "homepage": "https://github.com/Hd28br/Engineer-gaming#readme"
 }
