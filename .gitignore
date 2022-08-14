@@ -1,0 +1,9 @@
+/node_modules
+.env
+start.sh
+botLog.log
+assets/twemoji
+assets/32x.png
+minesweeperXB
+data/money.json
+package-lock.json
