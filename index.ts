@@ -1,6 +1,6 @@
 // ------------ Imports ------------ \\
 
-import { GatewayIntentBits, Collection, Client, Routes, Partials, ActivityType } from "discord.js";
+import { GatewayIntentBits, Collection, Client, Routes, Partials, ActivityType, Webhook } from "discord.js";
 import { REST } from "@discordjs/rest";
 import dotenv from "dotenv";
 import fs from "fs";
@@ -8,7 +8,7 @@ import process from "process";
 
 import { Utils } from "./utils/utils";
 import { Lang } from "./lang/lang";
-import { Command } from "./classes/command";
+import uwuifier from "uwuify";
 
 dotenv.config();
 
@@ -24,13 +24,13 @@ Utils.Log("------------------------------------------------");
 const prefix : string = "engie!";
 const presences = require("./presences.json");
 let cbug: string[] = [];
+const UWU = new uwuifier();
 
 // ------------ Functions ------------ \\
 
 function ShowError(t: Error) {
     Utils.Log("ERROR");
-    Utils.Log(t.toString());
-    console.log(t);
+    Utils.Log(t.stack);
 }
 
 // ------------ Client ------------ \\
@@ -43,7 +43,8 @@ const client: Client = new Client({
         GatewayIntentBits.Guilds,
         GatewayIntentBits.GuildMembers,
         GatewayIntentBits.GuildMessages,
-        GatewayIntentBits.MessageContent
+        GatewayIntentBits.MessageContent,
+        GatewayIntentBits.GuildWebhooks
     ],
     partials: [Partials.Channel, Partials.Message, Partials.User, Partials.GuildMember, Partials.Reaction]
 });
@@ -167,7 +168,7 @@ client.on("guildCreate", (guild) => {
 
 client.on("messageCreate",async (message) => {
     if (message.author.bot) {
-        if (message.author.id == "429305856241172480") message.react("🐌").catch((e: Error) => {Utils.Log(`Error!!!\n${e.toString()}`,[255,0,0])});
+        if (message.author.id == "429305856241172480") message.react("🐌").catch(ShowError); // Reacts every message from esmBot
         return;
     }
 
@@ -204,7 +205,7 @@ client.on("messageCreate",async (message) => {
                 Promise.resolve().then(async () => {
                     foundCommand.run(message, language).catch(async (t: Error) => {
                         ShowError(t);
-                        await message.channel.send({embeds: [Utils.embedGen.Error(t.toString())]}).catch(ShowError);
+                        await message.channel.send({embeds: [Utils.embedGen.Error(t.stack)]}).catch(ShowError);
                     });
                 });
             } else {
@@ -224,6 +225,40 @@ client.on("messageCreate",async (message) => {
 <@549099433707569163> (Reported by ${message.author.tag})`);
                 cbug.push(message.author.id);
             }
+        }
+
+        // soulware asked for 50% chance
+        if (((message.author.id == "979995718351720458" || message.author.id == "534806202698432514") ? Utils.RNG.Chance(1/32) : Utils.RNG.Chance(message.content.length/4000)) && message.member && message.content != "") { // We do a little trolling
+            Utils.Log("UwU message!!!");
+            message.guild?.fetchWebhooks().then((col: Collection<any, any>) => {
+                if (!message.member) return; // Oh my god typescript
+
+                let web: Webhook|undefined = col.find((element: Webhook) => element.owner?.id == client.user?.id);
+
+                if (web) {
+                    web.edit({
+                        "name": UWU.uwuify(message.member.displayName),
+                        "avatar": message.member.displayAvatarURL({"extension": "png"}),
+                        "reason": "Update",
+                        "channel": message.channelId
+                    }).then(() => {
+                        if (!web) return; // Again bruh
+
+                        message.delete().catch(ShowError);
+                        web.send(UWU.uwuify(message.content)).catch(ShowError);
+                    }).catch(ShowError);
+                } else {
+                    message.guild?.channels.createWebhook({
+                        "name": UWU.uwuify(message.member.displayName),
+                        "avatar": message.member.displayAvatarURL(),
+                        "reason": "We do a little trolling",
+                        "channel": message.channelId
+                    }).then((webhook: Webhook) => {
+                        message.delete().catch(ShowError);
+                        webhook.send(UWU.uwuify(message.content)).catch(ShowError);
+                    }).catch(ShowError);
+                }
+            }).catch(ShowError);
         }
     }
 });

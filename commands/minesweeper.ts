@@ -73,7 +73,7 @@ function RenderSweeper(MS: Minesweeper, xray?: boolean) {
     return canv;
 }
 
-async function MSGameEvent(message: Message, language: Lang, key: string) {
+async function MSGameEvent(message: Message, language: Lang) {
     if (!games[message.author.id]) return;
     if (message.channelId != games[message.author.id][2]) return;
 
@@ -152,7 +152,7 @@ class MinesweeperCommand extends GameCommand {
         if (!message.deletable) {
             await message.channel.send(language.get("deletePerms"));
             return false;
-        } else if (games[message.author.id]) {
+        } else if (this.eventExist(message.author.id)) {
             await message.channel.send(language.get("alreadyGame"));
             return false;
         }
@@ -175,7 +175,7 @@ class MinesweeperCommand extends GameCommand {
         embed.setImage("attachment://minesweeper.png");
         let msg = await message.channel.send({ embeds: [embed], files: [attach] });
         games[message.author.id] = [MS,msg,message.channelId,this.deleteMessageEvent];
-        this.newMessageEvent(1000 * 60 * 2.25,() => games[message.author.id] = undefined, MSGameEvent);
+        this.newMessageEvent(message.author.id, 1000 * 60 * 2.25,() => games[message.author.id] = undefined, MSGameEvent);
     }
 
     // --------------------------------------------------------------------- \\

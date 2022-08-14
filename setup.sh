@@ -17,6 +17,7 @@ echo "[[\"person1\",0],[\"person2\",0],[\"person3\",100000000]]" >> data/money.j
 echo "TOKEN=discordbottoken" >> ".env"
 echo "TENOR=tenorkey" >> ".env"
 echo "UV_THEADPOOL_SIZE=4" >> ".env"
+echo "AUTOUPDATE=no" >> ".env"
 
 echo "Done!"
 echo "You can now delete this file (setup.sh), please read data/README.txt, and please change things in .env"

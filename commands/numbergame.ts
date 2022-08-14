@@ -54,7 +54,7 @@ class NumbergameCommand extends GameCommand {
         Number = undefined;
 
         // This code sucks
-        this.newMessageEvent(75000,(reason: string, key: string) => {
+        this.newMessageEvent(message.author.id,75000,(reason: string, key: string) => {
             games[message.author.id] = undefined;
         },(otherMessage: Message, lang: Lang, key: string) => {
             if (otherMessage.channelId != message.channel.id) return false;
@@ -68,8 +68,7 @@ class NumbergameCommand extends GameCommand {
                     if (num == game[0]) {
                         message.reply(language.get("numberGameWin",Utils.currency.formatMoney(Math.floor(1000 / (2 ** game[3])))));
                         Utils.currency.transfer(Utils.currency.engineerId,message.author.id,Math.floor(1000 / (2 ** game[3])));
-                        this.deleteMessageEvent(key);
-                        return false;
+                        return "delete";
                     }
                     
                     if (num > game[0]) {
